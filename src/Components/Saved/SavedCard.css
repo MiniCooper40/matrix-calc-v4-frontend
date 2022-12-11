@@ -1,0 +1,36 @@
+.saved-card-holder {
+    width: 90%;
+    height: 50px;
+
+    background-color: var(--white);
+    margin: 8px;
+    border: 1px solid var(--black);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.saved-details-holder {
+    display: flex;
+    flex-direction: column;
+    align-items:baseline;
+    justify-content: center;
+}
+
+.saved-usage-holder {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+    .saved-card-holder {
+        flex-direction: column;
+        height: fit-content;
+    }
+  }

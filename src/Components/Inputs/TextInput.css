@@ -1,0 +1,9 @@
+.text-input {
+    border: none;
+    background-color: none;
+    width: 90%;
+
+    font-size: 14px;
+    font-family: var(--secondary-font);
+    background-color: var(--white);
+}

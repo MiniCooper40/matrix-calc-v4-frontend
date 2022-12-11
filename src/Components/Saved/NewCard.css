@@ -1,0 +1,25 @@
+.new-card-button {
+    width: 100%;
+    background-color: var(--white);
+    border: 1px solid var(--black);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    fill: var(--black);
+}
+
+.new-card-button:hover {
+    fill: var(--white);
+    background-color: var(--black);
+    transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.new-card-holder {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px;
+}

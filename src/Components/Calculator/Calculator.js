@@ -100,13 +100,17 @@ export default function Calculator() {
 
             let result = UnaryCall(operation.url, matrixA)
             console.log('result', result)
-            result.then((response) => {
-                console.log('reponse is ok? ', response.ok)
-                console.log('response status: ', response.status)
-                // console.log('response.json() ', response.json())
-                if (response.ok) response.json().then((m) => setAnswer(formatAnswer(m)))
-                else response.json().then((e) => setError(e))
-            })
+            try {
+                result.then((response) => {
+                    console.log('reponse is ok? ', response.ok)
+                    console.log('response status: ', response.status)
+                    // console.log('response.json() ', response.json())
+                    if (response.ok) response.json().then((m) => setAnswer(formatAnswer(m)))
+                    else response.json().then((e) => setError(e))
+                })
+            } catch (error) {
+                console.log('error', error)
+            }
             // console.log('answer', answer)
             // console.log('error', error)
 
@@ -154,7 +158,7 @@ const OPERATIONS = {
             fullName: 'Reduced Row Echelon',
             shortName: "RREF",
             id: 0,
-            url: 'http://localhost:8080/api/rref'
+            url: 'https://matrix-calc-v4-backend.herokuapp.com/api/rref'
         },
     ],
 
@@ -163,19 +167,19 @@ const OPERATIONS = {
             fullName: 'Addition',
             shortName: 'Add',
             id: 100,
-            url: 'http://localhost:8080/api/addition'
+            url: 'http://matrix-calc-v4-backend.herokuapp.com/api/addition'
         },
         {
             fullName: 'Subtraction',
             shortName: 'Sub',
             id: 101,
-            url: 'http://localhost:8080/api/subtraction'
+            url: 'http://matrix-calc-v4-backend.herokuapp.com/api/subtraction'
         },
         {
             fullName: 'Multiplication',
             shortName: 'Multiply',
             id: 102,
-            url: 'http://localhost:8080/api/multiplication'
+            url: 'http://matrix-calc-v4-backend.herokuapp.com/api/multiplication'
         },
     ]
 }

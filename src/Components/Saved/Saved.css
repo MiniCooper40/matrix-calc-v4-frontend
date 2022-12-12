@@ -40,6 +40,7 @@
     border-bottom-left-radius: 14px;
     font-family: var(--main-font);
     cursor: pointer;
+    transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .toggle-button:hover {

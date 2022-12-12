@@ -6,7 +6,7 @@ export default function NewCard({onSave}) {
     return (
         <div className="new-card-holder">
             <button onClick={onSave} className="new-card-button">
-                <Plus width="30" />
+                <Plus width="20" />
             </button>
         </div>
     )

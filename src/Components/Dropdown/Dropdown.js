@@ -3,7 +3,6 @@ import "./Dropdown.css"
 import { OPERATIONS } from "../Calculator/Calculator"
 import DropdownItem from "./DropdownItem"
 import { ReactComponent as Down } from "./down.svg"
-import { ReactComponent as Up } from "./up.svg"
 
 export default function Dropdown({ operation, setOperation, type }) {
 

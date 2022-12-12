@@ -26,6 +26,10 @@
     font-size: 14px;
 }
 
+.cell:disabled {
+    background-color: white;
+}
+
 .dim-holder {
     display: flex;
     flex-direction: row;

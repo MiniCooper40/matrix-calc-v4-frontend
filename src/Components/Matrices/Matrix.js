@@ -26,6 +26,7 @@ export default function Matrix({ matrix, setMatrix, id }) {
     }
 
     const updateCell = (e, row, col) => {
+
         e.preventDefault()
         console.log('e in updateCell', e)
 
@@ -58,7 +59,7 @@ export default function Matrix({ matrix, setMatrix, id }) {
         let inputs = []
         for (let i = 0; i < dim.rows; i++) {
             for (let j = 0; j < dim.cols; j++) {
-                let input = <input className="cell" onChange={e => updateCell(e, i, j)} value={data[j * MAX_ROWS + i]} key={`${i} ${j}`} placeholder={`${i}, ${j}`} />
+                let input = <input disabled={setMatrix === undefined} className="cell" onChange={e => updateCell(e, i, j)} value={data[j * MAX_ROWS + i]} key={`${i} ${j}`} placeholder={`${i}, ${j}`} />
                 inputs.push(input)
             }
         }
@@ -85,15 +86,15 @@ export default function Matrix({ matrix, setMatrix, id }) {
     function reset(e) {
         e.preventDefault()
         setMatrix((state) => {
-            let result = {...state}
+            let result = { ...state }
             let resetMatrix = {
                 dim: {
-                    rows:2,
-                    cols:2
+                    rows: 2,
+                    cols: 2
                 },
                 data: new Array(100).fill('')
             }
-            if(id) {
+            if (id) {
                 result[id] = resetMatrix
             }
             else result = resetMatrix
@@ -103,14 +104,15 @@ export default function Matrix({ matrix, setMatrix, id }) {
 
     return (
         <div className="matrix-holder">
-            <div className="dim-holder">
-                <NumInput value={dim.rows} increment={() => updateDim({ type: 'rows', inc: 1 })} decrement={() => updateDim({ type: 'rows', inc: -1 })} />
-                <NumInput value={dim.cols} increment={() => updateDim({ type: 'cols', inc: 1 })} decrement={() => updateDim({ type: 'cols', inc: -1 })} />
-            </div>
+            {setMatrix !== undefined &&
+                <div className="dim-holder">
+                    <NumInput value={dim.rows} increment={() => updateDim({ type: 'rows', inc: 1 })} decrement={() => updateDim({ type: 'rows', inc: -1 })} />
+                    <NumInput value={dim.cols} increment={() => updateDim({ type: 'cols', inc: 1 })} decrement={() => updateDim({ type: 'cols', inc: -1 })} />
+                </div>}
             <form ref={ref} id="matrix-form" >
                 <div className="matrix" style={matrixStyle}>
                     {generateInputs()}
-                    <Clipboard onPaste={paste} onCopy={copy} onReset={reset} />
+                    <Clipboard onPaste={paste} onCopy={copy} onReset={reset} isAnswer={setMatrix === undefined} />
                 </div>
             </form>
         </div>

@@ -167,19 +167,19 @@ const OPERATIONS = {
             fullName: 'Addition',
             shortName: 'Add',
             id: 100,
-            url: 'http://matrix-calc-v4-backend.herokuapp.com/api/addition'
+            url: 'https://matrix-calc-v4-backend.herokuapp.com/api/addition'
         },
         {
             fullName: 'Subtraction',
             shortName: 'Sub',
             id: 101,
-            url: 'http://matrix-calc-v4-backend.herokuapp.com/api/subtraction'
+            url: 'https://matrix-calc-v4-backend.herokuapp.com/api/subtraction'
         },
         {
             fullName: 'Multiplication',
             shortName: 'Multiply',
             id: 102,
-            url: 'http://matrix-calc-v4-backend.herokuapp.com/api/multiplication'
+            url: 'https://matrix-calc-v4-backend.herokuapp.com/api/multiplication'
         },
     ]
 }

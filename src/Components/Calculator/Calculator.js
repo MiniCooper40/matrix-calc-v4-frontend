@@ -6,11 +6,13 @@ import Single from "../Matrices/Single"
 import Double from "../Matrices/Double"
 import SavedPanel from "../Saved/SavedPanel"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
+import Dropdown from "../Dropdown/Dropdown"
 
 export default function Calculator() {
 
-    const [type, setType] = useState('single')
+    const [type, setType] = useState('unary')
+    const [operation, setOperation] = useState(undefined)
 
     function newBlankMatrix() {
         return {
@@ -22,6 +24,11 @@ export default function Calculator() {
             name: "A Matrix"
         }
     }
+
+    useEffect(
+        () => setOperation(undefined),
+        [type]
+    )
 
     const [matrix, setMatrix] = useState(newBlankMatrix())
     const [matrices, setMatrices] = useState({A: newBlankMatrix(), B: newBlankMatrix()})
@@ -55,15 +62,46 @@ export default function Calculator() {
     return (
         <ClipboardContext.Provider value={{copied: copied, setCopied: (matrix) => setCopied(matrix)}}>
             <div className="calculator-holder">
+                <Dropdown setOperation={setOperation} operation={operation} type={type} />
                 <SavedPanel />
                 <div className="settings-holder">
-                    <Button size="big" title="Single" onClick={() => setType('single')} />
-                    <Button size="big" title="Double" onClick={() => setType('double')} />
+                    <Button size="big" title="Single" onClick={() => setType('unary')} />
+                    <Button size="big" title="Double" onClick={() => setType('binary')} />
                 </div>
-                {type === 'single' && <Single setMatrix={setMatrix} matrix={matrix} />}
-                {type === 'double' && <Double setMatrices={setMatrices} matrices={matrices} />}
+                {type === 'unary' && <Single setMatrix={setMatrix} matrix={matrix} />}
+                {type === 'binary' && <Double setMatrices={setMatrices} matrices={matrices} />}
                 <Button size="medium" title="Solve" onClick={handleForm} />
             </div>
         </ClipboardContext.Provider>
     )
 }
+
+const OPERATIONS = {
+    unary: [
+        {
+            fullName: 'Reduced Row Echelon',
+            shortName: "RREF",
+            id: 0
+        },
+    ],
+
+    binary: [
+        {
+            fullName: 'Addition',
+            shortName: 'Add',
+            id: 100
+        },
+        {
+            fullName: 'Subtraction',
+            shortName: 'Sub',
+            id: 101
+        },
+        {
+            fullName: 'Multiplication',
+            shortName: 'Multiply',
+            id: 102
+        },
+    ]
+}
+
+export {OPERATIONS}

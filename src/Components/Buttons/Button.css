@@ -4,6 +4,7 @@
     color: var(--black);
     background-color: var(--white);
     font-family: var(--secondary-font);
+    border-width: 1px;
 
     cursor: pointer;
     transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);

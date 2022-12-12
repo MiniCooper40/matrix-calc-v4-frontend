@@ -9,7 +9,7 @@ export default async function BinaryCall(url, matrixA, matrixB) {
             A: matrixA,
             B: matrixB
         })
-    }).then(r => r.json())
+    })
 
     return result
 }

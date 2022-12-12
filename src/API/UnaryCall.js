@@ -8,5 +8,5 @@ export default async function UnaryCall(url, matrix) {
         body: JSON.stringify(matrix)
     })
 
-    return result.json()
+    return result
 }

@@ -44,12 +44,21 @@ export default function Matrix({ matrix, setMatrix, id }) {
     const updateDim = ({ type, inc }) => {
         setMatrix((state) => {
             let updated = { ...state }
+            console.log('state', state)
             if (!id) {
                 updated.dim[type] += inc
-                if (updated.dim.rows < 1 || updated.dim.rows > MAX_ROWS || updated.dim.cols < 1 || updated.dim.cols > MAX_COLS) return state
+                console.log('updated', updated)
+                if (updated.dim.rows < 1) updated.dim.rows = 1
+                else if(updated.dim.rows > MAX_ROWS) updated.dim.rows = MAX_ROWS
+                else if(updated.dim.cols < 1) updated.dim.cols = 1
+                else if(updated.dim.cols > MAX_COLS) updated.dim.cols = MAX_COLS
             } else {
                 updated[id].dim[type] += inc
-                if (updated[id].dim.rows < 1 || updated[id].dim.rows > MAX_ROWS || updated[id].dim.cols < 1 || updated[id].dim.cols > MAX_COLS) return state
+                console.log('updated', updated)
+                if (updated[id].dim.rows < 1) updated[id].dim.rows = 1
+                else if(updated[id].dim.rows > MAX_ROWS) updated[id].dim.rows = MAX_ROWS
+                else if(updated[id].dim.cols < 1) updated[id].dim.cols = 1
+                else if(updated[id].dim.cols > MAX_COLS) updated[id].dim.cols = MAX_COLS
             }
             return updated
         })

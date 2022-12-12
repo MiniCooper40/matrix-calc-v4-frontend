@@ -12,17 +12,20 @@ import Dropdown from "../Dropdown/Dropdown"
 import BinaryCall from "../../API/BinaryCall"
 import UnaryCall from "../../API/UnaryCall"
 
+import ErrorMessage from "../Typography/ErrorMessage"
+
 export default function Calculator() {
 
     const [type, setType] = useState('unary')
     const [operation, setOperation] = useState(undefined)
     const [answer, setAnswer] = useState(undefined)
+    const [error, setError] = useState(undefined)
 
     function newBlankMatrix() {
         return {
             dim: {
-                rows:2,
-                cols:2
+                rows: 2,
+                cols: 2
             },
             data: new Array(100).fill(''),
             name: "A Matrix"
@@ -31,47 +34,58 @@ export default function Calculator() {
 
     useEffect(
         () => {
-            setOperation(undefined)
             setAnswer(undefined)
+            setError(undefined)
+            setOperation(undefined)
         },
         [type]
     )
 
+    useEffect(
+        () => {
+            setError(undefined)
+        },
+        [answer, operation]
+    )
+
     const [matrix, setMatrix] = useState(newBlankMatrix())
-    const [matrices, setMatrices] = useState({A: newBlankMatrix(), B: newBlankMatrix()})
+    const [matrices, setMatrices] = useState({ A: newBlankMatrix(), B: newBlankMatrix() })
 
     const [copied, setCopied] = useState(undefined)
 
     // useEffect(() => setCopied(undefined), [])
 
     function parseMatrix(matrix) {
-        let {rows, cols} = matrix.dim
+        let { rows, cols } = matrix.dim
         let parsed = new Array(rows).fill(0).map(entry => entry = new Array(cols).fill(0))
         let data = matrix.data
-        for(let i = 0; i < rows; i++) {
-            for(let j = 0; j < cols; j++) {
-                let val = data[j*10 + i]
-                if(val === '') parsed[i][j] = '0'
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                let val = data[j * 10 + i]
+                if (val === '') parsed[i][j] = '0'
                 else parsed[i][j] = val
             }
         }
         return parsed
     }
 
-    function formatAnswer({numRows, numCols, data}) {
+    function formatAnswer({ rows, cols, data }) {
 
         let formated = new Array(100).fill('')
 
-        for(let i = 0; i < numRows; i++) {
-            for(let j = 0; j < numCols; j++) {
-                formated[j*10 + i] = data[i][j]
+        console.log("recieved rows", rows)
+        console.log("recieved cols", cols)
+
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                formated[j * 10 + i] = data[i][j]
             }
         }
 
         return {
             dim: {
-                rows: numRows,
-                cols: numCols
+                rows: rows,
+                cols: cols
             },
             name: 'A Matrix',
             data: formated
@@ -79,36 +93,44 @@ export default function Calculator() {
     }
 
     async function handleForm() {
+        setAnswer(undefined)
         if (type === 'unary') {
-            let matrixA = {...matrix, data: parseMatrix(matrix)}
+            let matrixA = { ...matrix, data: parseMatrix(matrix) }
             console.log('matrix', matrixA)
-            try {
-                let result = UnaryCall(operation.url, matrixA)
-                console.log('result', result)
-                result.then(data => setAnswer(formatAnswer(data)))
-                console.log('answer', answer)
-            } catch (error) {
-                console.log('error', error)
-            }
+
+            let result = UnaryCall(operation.url, matrixA)
+            console.log('result', result)
+            result.then((response) => {
+                console.log('reponse is ok? ', response.ok)
+                console.log('response status: ', response.status)
+                // console.log('response.json() ', response.json())
+                if (response.ok) response.json().then((m) => setAnswer(formatAnswer(m)))
+                else response.json().then((e) => setError(e))
+            })
+            // console.log('answer', answer)
+            // console.log('error', error)
+
         }
         else {
-            let matrixA = {...matrices.A, data: parseMatrix(matrices.A)}
-            let matrixB = {...matrices.B, data: parseMatrix(matrices.B)}
-            console.log('A', matrixA)
-            console.log('B', matrixB)
-            try {
-                let result = BinaryCall(operation.url, matrixA, matrixB)
-                console.log('result', result)
-                result.then(data => setAnswer(formatAnswer(data)))
-                console.log('answer', answer)
-            } catch (error) {
-                console.log('error', error)
-            }
+            let matrixA = { ...matrices.A, data: parseMatrix(matrices.A) }
+            let matrixB = { ...matrices.B, data: parseMatrix(matrices.B) }
+            // console.log('A', matrixA)
+            // console.log('B', matrixB)
+
+            let result = BinaryCall(operation.url, matrixA, matrixB)
+            result.then((response) => {
+                // console.log('reponse is ok? ', response.ok)
+                // console.log('response status: ', response.status)
+                if (response.ok) response.json().then((m) => setAnswer(formatAnswer(m)))
+                else response.json().then((e) => setError(e))
+            })
+            // console.log('answer', answer)
+            // console.log('error', error)
         }
     }
 
     return (
-        <ClipboardContext.Provider value={{copied: copied, setCopied: (matrix) => setCopied(matrix)}}>
+        <ClipboardContext.Provider value={{ copied: copied, setCopied: (matrix) => setCopied(matrix) }}>
             <div className="calculator-holder">
                 <Dropdown setOperation={setOperation} operation={operation} type={type} />
                 <SavedPanel />
@@ -120,6 +142,7 @@ export default function Calculator() {
                 {type === 'binary' && <Double setMatrices={setMatrices} matrices={matrices} />}
                 {operation && <Button size="medium" title="Solve" onClick={handleForm} />}
                 {answer && <Single matrix={answer} setMatrix={undefined} />}
+                {error && <ErrorMessage reason={error.reason} suggestion={error.suggestion} />}
             </div>
         </ClipboardContext.Provider>
     )
@@ -157,4 +180,4 @@ const OPERATIONS = {
     ]
 }
 
-export {OPERATIONS}
+export { OPERATIONS }
